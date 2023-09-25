@@ -3,6 +3,9 @@ import {useRoute} from '@react-navigation/native';
 import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import storage from "../utils/storage"
+import Calendar from "../components/Calendar";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
+
 
 
 const DetailScreen = () => {
@@ -16,7 +19,7 @@ const DetailScreen = () => {
         name: "",
         email: ""
     })
-    const [date, setDate] = useState('09-10-2020');
+    const [date, setDate] = new useState(new Date("2021-12-31"))
     const [open, setOpen] = useState(false)
 
 
@@ -55,6 +58,15 @@ const DetailScreen = () => {
         storage.saveData("data", JSON.stringify(newArray)).catch(err=>console.log(err))
     }
 
+    const handleDateChange = (event, selectedDate) => {
+        if (selectedDate !== undefined) {
+            setDate(selectedDate);
+            console.log(selectedDate)
+        }
+    };
+
+
+
 
     return (
         <View>
@@ -79,65 +91,14 @@ const DetailScreen = () => {
                 <Button title={"Vymaž"} onPress={handleReset}></Button>
                 <Text>Ahooj</Text>
             </View>
-            {/*<Calendar*/}
-            {/*    enableSwipeMonths={true}*/}
-            {/*    onDayPress={(day) => {*/}
-            {/*        console.log('selected day', day);*/}
-            {/*    }}*/}
-            {/*    renderArrow={(direction) => (*/}
-            {/*        <View>*/}
-            {/*            {direction === 'left' ? (*/}
-            {/*                <Text>{'<'}</Text> // Šipka doleva*/}
-            {/*            ) : (*/}
-            {/*                <Text>{'>'}</Text> // Šipka doprava*/}
-            {/*            )}*/}
-            {/*        </View>*/}
-            {/*    )}*/}
-            {/*/>*/}
-
-            {/*<DatePicker*/}
-            {/*    date={date} // Initial date from state*/}
-            {/*    mode="date" // The enum of date, datetime and time*/}
-            {/*    modal*/}
-            {/*    open={open}*/}
-            {/*    placeholder="select date"*/}
-            {/*    format="DD-MM-YYYY"*/}
-            {/*    minDate="01-01-2016"*/}
-            {/*    maxDate="01-01-2019"*/}
-            {/*    confirmBtnText="Confirm"*/}
-            {/*    cancelBtnText="Cancel"*/}
-            {/*    customStyles={{*/}
-            {/*        dateIcon: {*/}
-            {/*            //display: 'none',*/}
-            {/*            position: 'absolute',*/}
-            {/*            left: 0,*/}
-            {/*            top: 4,*/}
-            {/*            marginLeft: 0,*/}
-            {/*        },*/}
-            {/*        dateInput: {*/}
-            {/*            marginLeft: 36,*/}
-            {/*        },*/}
-            {/*    }}*/}
-            {/*    onDateChange={(date) => {*/}
-            {/*        setDate(date);*/}
-            {/*    }}*/}
-            {/*/>*/}
-
-            {/*<Button title="Open" onPress={() => setOpen(true)} />*/}
-            {/*<DatePicker*/}
-            {/*    modal*/}
-            {/*    open={open}*/}
-            {/*    date={date}*/}
-            {/*    onConfirm={(date) => {*/}
-            {/*        setOpen(false)*/}
-            {/*        setDate(date)*/}
-            {/*    }}*/}
-            {/*    onCancel={() => {*/}
-            {/*        setOpen(false)*/}
-            {/*    }}*/}
-            {/*/>*/}
 
 
+            <RNDateTimePicker
+                value={new Date()} // Predvolený dátum
+                mode="date" // Zabezpečí, aby sa zobrazil dátumový výber
+                display="spinner" // Použiť spinner pre výber dátumu, ak je k dispozícii
+                onChange={(event, date)=>handleDateChange(event,date)}
+            />
             <ScrollView>
                 {formDataArray.map((info,index)=>{
                     return <View>
