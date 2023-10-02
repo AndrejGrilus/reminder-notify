@@ -22,6 +22,8 @@ const DetailScreen = () => {
     const [date, setDate] = new useState(new Date("2021-12-31"))
     const [open, setOpen] = useState(false)
 
+    const [shouldShowPicker,setShouldShowPicker] = useState(false)
+
 
     useEffect(() => {
         const reloadData = () =>{
@@ -63,6 +65,7 @@ const DetailScreen = () => {
             setDate(selectedDate);
             console.log(selectedDate)
         }
+        setShouldShowPicker(!shouldShowPicker)
     };
 
 
@@ -93,12 +96,12 @@ const DetailScreen = () => {
             </View>
 
 
-            <RNDateTimePicker
+            {shouldShowPicker?<RNDateTimePicker
                 value={new Date()} // Predvolený dátum
                 mode="date" // Zabezpečí, aby sa zobrazil dátumový výber
                 display="spinner" // Použiť spinner pre výber dátumu, ak je k dispozícii
                 onChange={(event, date)=>handleDateChange(event,date)}
-            />
+            />:<Button onPress={()=>setShouldShowPicker(!shouldShowPicker)} title={date.toISOString()}/>}
             <ScrollView>
                 {formDataArray.map((info,index)=>{
                     return <View>
